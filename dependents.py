@@ -3,7 +3,7 @@ from secret import api_key
 import pandas as pd
 import pickle
 import requests
-
+import sys
 
 REFRESH_DEPS = False
 
@@ -48,10 +48,15 @@ def load_deps(platform, name):
 
 
 if __name__ == '__main__':
-    if REFRESH_DEPS:
-        get_deps('pypi', 'numba')
+    if len(sys.argv) > 1:
+        package = sys.argv[1]
+    else:
+        package = 'numba'
 
-    deps = load_deps('pypi', 'numba')
+    if REFRESH_DEPS:
+        get_deps('pypi', package)
+
+    deps = load_deps('pypi', package)
 
     df = pd.DataFrame(deps)
     ranked = df.sort_values('stars', ascending=False)
